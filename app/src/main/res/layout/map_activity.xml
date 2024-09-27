@@ -61,7 +61,7 @@
             android:id="@+id/location_btn"
             android:layout_width="150dp"
             android:layout_height="70dp"
-            android:text="현위치로 검색"
+            android:text="내위치로 검색"
             android:textSize="13dp"
             android:gravity="center"
             />

@@ -1,6 +1,7 @@
 package com.seyoung.alonepeople;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,8 +71,12 @@ public class apiTestPage extends AppCompatActivity {
     String getXmlData() {
         StringBuffer buffer = new StringBuffer();
         String str = edit.getText().toString();
+
         String location = URLEncoder.encode(str);
+        Log.d("location   " + "location   ", location);
+
         String queryUrl = "https://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncListInfoInqire?serviceKey=e8KTlQRE%2FBEp0%2FkRGPGRPDSk2HBjZn253hX1jPyfCE1txYtnRw%2FQ2n6xRhMx1yHBcah8IxLOsCSrVsejfw4vhQ%3D%3D&Q0="+location+"&pageNo=1&numOfRows=10";
+        Log.d("queryUrl", "queryUrl   " + queryUrl);
 
         try {
             URL url = new URL(queryUrl);

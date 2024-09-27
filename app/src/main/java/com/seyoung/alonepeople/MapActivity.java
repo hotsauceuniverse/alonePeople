@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -48,7 +50,22 @@ import com.kakao.vectormap.label.LabelLayer;
 import com.kakao.vectormap.label.LabelOptions;
 import com.kakao.vectormap.label.LabelStyle;
 
+import net.daum.mf.map.api.MapPOIItem;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Locale;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 public class MapActivity extends AppCompatActivity {
 
@@ -67,12 +84,11 @@ public class MapActivity extends AppCompatActivity {
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
     private ImageView gpsDot;
-
     private Button locationBtn;
-    private String location = "";
 
     // https://stickode.tistory.com/1120
     private KakaoMapReadyCallback readyCallback = new KakaoMapReadyCallback() {
+
         @Override
         public void onMapReady(@NonNull KakaoMap map) {
             kakaoMap = map; // kakaoMap 초기화
@@ -84,6 +100,7 @@ public class MapActivity extends AppCompatActivity {
                         .setStyles(LabelStyle.from(R.drawable.red_dot_marker_32px).setAnchorPoint(0.5f, 0.5f))
                         .setRank(1));
             }
+            locationFromApi();
         }
 
         @NonNull
@@ -142,24 +159,55 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void locationFromApi() {
+
        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSIONS_REQUEST_CODE);
             return;
        }
+
        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
            @Override
            public void onSuccess(Location location) {
                if (location != null) {
+                   // 현재 위치 좌표 (위도, 경도)
                    double latitude = location.getLatitude();
                    double longitude = location.getLongitude();
+                   Log.d("lat", "lat   " + latitude);
+                   Log.d("lon", "lon   " + longitude);
 
-                   String queryUrl = "https://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncListInfoInqire?serviceKey=e8KTlQRE%2FBEp0%2FkRGPGRPDSk2HBjZn253hX1jPyfCE1txYtnRw%2FQ2n6xRhMx1yHBcah8IxLOsCSrVsejfw4vhQ%3D%3D&Q0=" + latitude + "," + longitude + "&pageNo=1&numOfRows=10";
-                   callApi(queryUrl);
+                   getAddressFromLocation(latitude, longitude);
                } else {
                    Log.d("error", "error");
                }
            }
        });
+    }
+
+    private void getAddressFromLocation(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+            if (addresses != null && !addresses.isEmpty()) {
+                // https://junyoru.tistory.com/92
+                Address address = addresses.get(0);
+//                String fullAddress = address.getAddressLine(0);  // 전체 주소 -> 대한민국 서울특별시 영등포구 여의대로 -> null ok
+//                String state = address.getAdminArea();            // 도시 -> 서울특별시 -> ok
+//                String districtName = address.getSubLocality();    // 구 -> 영등포구 -> ok
+                String roadName = address.getFeatureName();         // 도로명 주소 -> 여의대로 -> ok
+
+                // https://bennyziiolab.tistory.com/entry/Lecture-35-Java14-URLEncode-Decode-JSON-Library-socket-tcpserver-tcpclient
+                String encodeAddress = URLEncoder.encode(roadName, "UTF-8");
+
+                String queryUrl = "https://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncListInfoInqire?serviceKey=e8KTlQRE%2FBEp0%2FkRGPGRPDSk2HBjZn253hX1jPyfCE1txYtnRw%2FQ2n6xRhMx1yHBcah8IxLOsCSrVsejfw4vhQ%3D%3D&Q0=" + encodeAddress + "&pageNo=1&numOfRows=10";
+                Log.d("queryUrl   ", "queryUrl   " + queryUrl);
+
+                callApi(queryUrl);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void callApi(String queryUrl) {
@@ -168,6 +216,7 @@ public class MapActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.d("ok", response);
+                addCustomMarker(response);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -178,10 +227,50 @@ public class MapActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
+    // api 호출 후 api내에 위도/경도를 통해 지도에 마커 찍기
+    public void addCustomMarker(String response) {
+        try {
+            // XML 응답을 처리
+            InputStream inputStream = new ByteArrayInputStream(response.getBytes("UTF-8"));
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(inputStream);
+            doc.getDocumentElement().normalize();
 
-    public void addCustomMarker() {
+            NodeList nodeList = doc.getElementsByTagName("item");
 
+            // LabelLayer를 가져옵니다.
+            LabelLayer layer = kakaoMap.getLabelManager().getLayer();
+
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    double lat = Double.parseDouble(element.getElementsByTagName("wgs84Lon").item(0).getTextContent());
+                    double lon = Double.parseDouble(element.getElementsByTagName("wgs84Lat").item(0).getTextContent());
+                    String name = element.getElementsByTagName("dutyName").item(0).getTextContent();
+
+                    Log.d("lat", "lat   " + lat);
+                    Log.d("lon", "lon   " + lon);
+                    Log.d("name", "name   " + name);
+
+                    // 마커 위치 설정
+                    LatLng markerPosition = LatLng.from(lat, lon);
+
+                    // 마커 옵션 생성
+                    LabelOptions labelOptions = LabelOptions.from(name, markerPosition)
+                            .setStyles(LabelStyle.from(R.drawable.red_dot_marker_32px).setAnchorPoint(0.5f, 0.5f))
+                            .setRank(1); // 마커 스타일 설정
+
+                    // 마커 추가
+                    layer.addLabel(labelOptions);
+                }
+            }
+        } catch (Exception xmlException) {
+            xmlException.printStackTrace();
+        }
     }
+
 
 
     @Override
