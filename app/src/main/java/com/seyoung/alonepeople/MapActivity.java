@@ -51,6 +51,7 @@ import com.kakao.vectormap.label.LabelOptions;
 import com.kakao.vectormap.label.LabelStyle;
 
 import net.daum.mf.map.api.MapPOIItem;
+import net.daum.mf.map.api.MapPoint;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -112,7 +113,7 @@ public class MapActivity extends AppCompatActivity {
         @NonNull
         @Override
         public int getZoomLevel() {
-            return 17;  // 기본 줌 레벨 설정
+            return 15;  // 기본 줌 레벨 설정
         }
     };
 
@@ -148,14 +149,7 @@ public class MapActivity extends AppCompatActivity {
                 moveToCurrentLocation();
             }
         });
-
-        locationBtn = findViewById(R.id.location_btn);
-        locationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                locationFromApi();
-            }
-        });
+        locationFromApi();
     }
 
     private void locationFromApi() {
@@ -229,49 +223,51 @@ public class MapActivity extends AppCompatActivity {
 
     // api 호출 후 api내에 위도/경도를 통해 지도에 마커 찍기
     public void addCustomMarker(String response) {
-        try {
-            // XML 응답을 처리
-            InputStream inputStream = new ByteArrayInputStream(response.getBytes("UTF-8"));
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(inputStream);
-            doc.getDocumentElement().normalize();
+        locationBtn = findViewById(R.id.location_btn);
+        locationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    // XML 응답을 처리
+                    InputStream inputStream = new ByteArrayInputStream(response.getBytes("UTF-8"));
+                    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder builder = factory.newDocumentBuilder();
+                    Document doc = builder.parse(inputStream);
+                    doc.getDocumentElement().normalize();
 
-            NodeList nodeList = doc.getElementsByTagName("item");
+                    NodeList nodeList = doc.getElementsByTagName("item");
 
-            // LabelLayer를 가져옵니다.
-            LabelLayer layer = kakaoMap.getLabelManager().getLayer();
+                    // LabelLayer를 가져옵니다.
+                    LabelLayer layer = kakaoMap.getLabelManager().getLayer();
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    double lat = Double.parseDouble(element.getElementsByTagName("wgs84Lon").item(0).getTextContent());
-                    double lon = Double.parseDouble(element.getElementsByTagName("wgs84Lat").item(0).getTextContent());
-                    String name = element.getElementsByTagName("dutyName").item(0).getTextContent();
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        Node node = nodeList.item(i);
+                        if (node.getNodeType() == Node.ELEMENT_NODE) {
+                            Element element = (Element) node;
+                            double lon = Double.parseDouble(element.getElementsByTagName("wgs84Lon").item(0).getTextContent());
+                            double lat = Double.parseDouble(element.getElementsByTagName("wgs84Lat").item(0).getTextContent());
+                            String name = element.getElementsByTagName("dutyName").item(0).getTextContent();
 
-                    Log.d("lat", "lat   " + lat);
-                    Log.d("lon", "lon   " + lon);
-                    Log.d("name", "name   " + name);
+                            Log.d("lat", "lat   " + lat);
+                            Log.d("lon", "lon   " + lon);
+                            Log.d("name", "name   " + name);
 
-                    // 마커 위치 설정
-                    LatLng markerPosition = LatLng.from(lat, lon);
+                            // 지도에 Label(마커) 추가
+                            LabelOptions labelOptions = LabelOptions.from("marker_" + i, LatLng.from(lat, lon))
+                                    .setStyles(LabelStyle.from(R.drawable.pin_marker_64px)) // 아이콘 이미지 설정
+                                    .setTexts(name);
 
-                    // 마커 옵션 생성
-                    LabelOptions labelOptions = LabelOptions.from(name, markerPosition)
-                            .setStyles(LabelStyle.from(R.drawable.red_dot_marker_32px).setAnchorPoint(0.5f, 0.5f))
-                            .setRank(1); // 마커 스타일 설정
+                            // 마커 추가
+                            layer.addLabel(labelOptions);
 
-                    // 마커 추가
-                    layer.addLabel(labelOptions);
+                        }
+                    }
+                } catch (Exception xmlException) {
+                    xmlException.printStackTrace();
                 }
             }
-        } catch (Exception xmlException) {
-            xmlException.printStackTrace();
-        }
+        });
     }
-
-
 
     @Override
     protected void onResume() {
