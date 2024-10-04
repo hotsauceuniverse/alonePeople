@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PointF;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -43,6 +44,7 @@ import com.kakao.vectormap.KakaoMap;
 import com.kakao.vectormap.KakaoMapReadyCallback;
 import com.kakao.vectormap.LatLng;
 import com.kakao.vectormap.MapView;
+import com.kakao.vectormap.Poi;
 import com.kakao.vectormap.camera.CameraUpdate;
 import com.kakao.vectormap.camera.CameraUpdateFactory;
 import com.kakao.vectormap.label.Label;
@@ -149,6 +151,15 @@ public class MapActivity extends AppCompatActivity {
                 moveToCurrentLocation();
             }
         });
+
+//        locationBtn = findViewById(R.id.location_btn);
+//        locationBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                locationFromApi();
+//            }
+//        });
+
         locationFromApi();
     }
 
@@ -237,7 +248,7 @@ public class MapActivity extends AppCompatActivity {
 
                     NodeList nodeList = doc.getElementsByTagName("item");
 
-                    // LabelLayer를 가져옵니다.
+                    // LabelLayer를 가져옴
                     LabelLayer layer = kakaoMap.getLabelManager().getLayer();
 
                     for (int i = 0; i < nodeList.getLength(); i++) {
@@ -262,6 +273,17 @@ public class MapActivity extends AppCompatActivity {
 
                         }
                     }
+
+                    kakaoMap.setOnMapClickListener(new KakaoMap.OnMapClickListener() {
+                        @Override
+                        public void onMapClicked(@NonNull KakaoMap kakaoMap, @NonNull LatLng position, @NonNull PointF screenPoint, @NonNull Poi poi) {
+                            Log.d("kakaoMap   ", "kakaoMap   " + kakaoMap);
+                            Log.d("position   ", "position   " + position);
+                            Log.d("screenPoint   ", "screenPoint   " + screenPoint);
+                            Log.d("poi   ", "poi   " + poi);
+                        }
+                    });
+
                 } catch (Exception xmlException) {
                     xmlException.printStackTrace();
                 }
