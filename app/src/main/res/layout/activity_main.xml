@@ -13,75 +13,315 @@
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
         >
 
         <LinearLayout
             android:id="@+id/one"
-            android:layout_width="150dp"
-            android:layout_height="370dp"
+            android:layout_width="160dp"
+            android:layout_height="334dp"
             android:background="@drawable/main_box"
+            android:backgroundTint="#FEF9E6"
+            android:orientation="vertical"
             >
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:background="@drawable/title_first"
+                android:gravity="center"
+                >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:textSize="20dp"
-                />
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:lottie_fileName="dancing_17659555.json"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="돼런하다!"
+                    android:textSize="16dp"
+                    android:textColor="#171717"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="8dp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="걸음 수"
+                    />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8,123"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:textColor="#171717"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="걸음"
+                        android:textSize="12dp"
+                        android:textColor="#4E5867"
+                        android:layout_marginLeft="5dp"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/two"
-            android:layout_width="150dp"
-            android:layout_height="230dp"
+            android:layout_width="160dp"
+            android:layout_height="264dp"
             android:background="@drawable/main_box"
+            android:backgroundTint="#3FD484"
             android:layout_below="@+id/one"
             android:layout_marginTop="10dp"
+            android:orientation="vertical"
             >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2"
-                android:textSize="20dp"
-                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:gravity="center"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="산책이나 갈까?"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    >
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        app:lottie_fileName="forest_14263786.json"
+                        android:layout_gravity="center"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/three"
-            android:layout_width="150dp"
-            android:layout_height="250dp"
+            android:layout_width="160dp"
+            android:layout_height="240dp"
             android:background="@drawable/main_box"
+            android:backgroundTint="#2DAAF8"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/one"
             >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3"
-                android:textSize="20dp"
-                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:gravity="center"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="공용 주차장"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    >
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        app:lottie_fileName="parking_15576863.json"
+                        android:layout_gravity="center"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="150dp"
-            android:layout_height="350dp"
+            android:id="@+id/four"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:background="@drawable/main_box"
+            android:backgroundTint="#EEE8FF"
             android:layout_below="@id/three"
             android:layout_toRightOf="@+id/two"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             >
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:gravity="center"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="오늘 뭐먹지?"
+                    android:textColor="#7643FF"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    >
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        app:lottie_fileName="dinner_13373851.json"
+                        android:layout_gravity="center"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/five"
+            android:layout_width="160dp"
+            android:layout_height="190dp"
+            android:background="@drawable/main_box"
+            android:backgroundTint="#FD8924"
+            android:layout_below="@id/four"
+            android:layout_toRightOf="@+id/two"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:gravity="center"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="아파요..."
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    >
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        app:lottie_fileName="hotel_16162052.json"
+                        android:layout_gravity="center"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/six"
+            android:layout_width="328dp"
+            android:layout_height="72dp"
+            android:background="@drawable/main_box"
+            android:backgroundTint="#EEF5FE"
+            android:layout_below="@id/five"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            >
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/ic_location_m2x"
+                />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4"
-                android:textSize="20dp"
+                android:text="나만의 스팟"
+                android:textColor="#47454C"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
                 />
 
         </LinearLayout>

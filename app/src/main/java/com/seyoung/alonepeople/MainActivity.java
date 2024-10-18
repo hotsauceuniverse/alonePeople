@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    LinearLayout one;
+    LinearLayout Five;
     LinearLayout three;
 
     @Override
@@ -17,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        one = findViewById(R.id.one);
-        one.setOnClickListener(new View.OnClickListener() {
+        Five = findViewById(R.id.five);
+        Five.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
