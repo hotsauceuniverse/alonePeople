@@ -67,4 +67,9 @@ dependencies {
     implementation 'com.tickaroo.tikxml:core:0.8.13'
     implementation 'com.tickaroo.tikxml:retrofit-converter:0.8.13'
     annotationProcessor 'com.tickaroo.tikxml:processor:0.8.13'
+
+    implementation 'de.hdodenhof:circleimageview:3.1.0' //Circle ImageView
+
+    implementation 'com.google.android.gms:play-services-fitness:21.2.0'
+    implementation 'com.google.android.gms:play-services-auth:21.2.0'
 }

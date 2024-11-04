@@ -4,7 +4,7 @@
     <item
         android:width="40dp"
         android:height="40dp"
-        android:drawable="@drawable/back_btn"
+        android:drawable="@drawable/back_btn_2"
         />
 
 </layer-list>
