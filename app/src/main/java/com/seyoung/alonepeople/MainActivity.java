@@ -39,22 +39,22 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
 
-    LinearLayout Five;
-    LinearLayout three;
-    LinearLayout four;
+    private LinearLayout Five;
+    private LinearLayout three;
+    private LinearLayout four;
+    private TextView Step;          // 걸음 수
+    private TextView Distance;      // 이동거리
+    private TextView Kcal;          // 칼로리
+
+    private int totalStep = 0;
+    private long totalStepTimeNumber = 0;
+    private float totalCaloriesFloat = 0;
+    private int totalCaloriesInt = 0;
+    private float totalDistanceFloat = 0;
+    private int totalDistanceInt = 0;
+    private String totalStepTimeString = "";
+
     private static final int REQUEST_OAUTH_REQUEST_CODE = 1;
-    TextView Step;          // 걸음 수
-    TextView Distance;      // 이동거리
-    TextView Kcal;          // 칼로리
-
-    int totalStep = 0;
-    long totalStepTimeNumber = 0;
-    float totalCaloriesFloat = 0;
-    int totalCaloriesInt = 0;
-    float totalDistanceFloat = 0;
-    int totalDistanceInt = 0;
-    String totalStepTimeString = "";
-
     private SensorManager sensorManager;
     private Sensor stepSensor;
 

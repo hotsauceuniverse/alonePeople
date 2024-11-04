@@ -27,6 +27,8 @@ public class MenuChoiceActivity extends AppCompatActivity {
     private ImageView BackBtn;
     private ImageView SlotImg;
     private PopUp PopUp;
+    private Random random = new Random();
+    private int currentIndex = 0;
 
     private int[] imageResources = {
             R.drawable.chicken, R.drawable.jjajangmyeon, R.drawable.jjambbong, R.drawable.meat,
@@ -43,9 +45,6 @@ public class MenuChoiceActivity extends AppCompatActivity {
             "국밥", "돈가스", "햄버거", "보쌈",
             "비빔밥"
     };
-
-    private Random random = new Random();
-    private int currentIndex = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
